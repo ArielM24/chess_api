@@ -1,0 +1,11 @@
+{
+  "body": {
+    "content": "",
+    "file": false,
+    "fileSize": false
+  },
+  "headers": {},
+  "method": "GET",
+  "title": "chess home",
+  "url": "https://chess-api-vwk0.onrender.com/home"
+}
