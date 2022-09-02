@@ -7,12 +7,14 @@ class Piece():
     name: str
     column: str
     row: int
+    moved: bool = False
     
     def __str__(self):
         return "{} {}".format(self.number, self.name)
     
     def to_map(self):
-        return {'name': self.name, 'column': self.column, 'row': self.row}
+        return {'name': self.name, 'column': self.column,
+                'row': self.row, 'moved': self.moved}
     
     @staticmethod
     def initial_pieces() -> list:
@@ -20,7 +22,7 @@ class Piece():
             Piece(name='White King',column='e',row=1),
             Piece(name='White Queen',column='d', row=1),
             Piece(name='White Bishop', column='f', row=1),
-            Piece(name='White Bishop', column='c',row= 1),
+            Piece(name='White Bishop', column='c',row=1),
             Piece(name='White Knight', column='g', row=1),
             Piece(name='White Knight', column='b', row=1),
             Piece(name='White Rook', column='h', row=1),
