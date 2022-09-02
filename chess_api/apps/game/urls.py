@@ -7,4 +7,5 @@ urlpatterns = [
     path('new_game', NewGameView.as_view()),
     path('make_move', MakeMoveView.as_view()),
     path('join_player', JoinPlayerView.as_view()),
+    path('set_winner', SetWinnerView.as_view()),
 ]

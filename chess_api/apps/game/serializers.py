@@ -41,3 +41,7 @@ class MakeMoveSerializer(serializers.Serializer):
     is_player_w = serializers.BooleanField(required=True)
     move_number = serializers.IntegerField(required=True)
     game_id = serializers.CharField(required=True)
+    
+class SetWinnerSerializer(serializers.Serializer):
+    winner = serializers.CharField(required=True)
+    game_id = serializers.CharField(required=True)

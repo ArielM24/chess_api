@@ -94,3 +94,10 @@ class GameManager(models.DjongoManager):
             game.save()
             return True
         return False
+    
+    def set_winner(self, winner_data):
+        game = self.find_game(winner_data['game_id'])
+        if game is not None:
+            game.winner = winner_data['winner']
+            game.save()
+            return game
