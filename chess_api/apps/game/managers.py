@@ -43,14 +43,20 @@ class GameManager(models.DjongoManager):
             piece_to_eat = self.find_piece(
                 game, move_data['next_column'], move_data['next_row'])
             
-            print(piece_to_move, piece_to_eat)
+            print('piece to move:', piece_to_move)
+            print('piece to eat:', piece_to_eat)
             
             if piece_to_eat is not None:
                 game.board[game.board.index(piece_to_eat)]['row'] = -1
                 game.board[game.board.index(piece_to_eat)]['column'] = ''
-            
+            last_moved = self.get_moved_piece_index(game)
+            print('last_moved', last_moved)
+            if last_moved is not None:
+                game.board[last_moved]['moved'] = False;
+                
             game.board[game.board.index(piece_to_move)]['row'] = move_data['next_row']
             game.board[game.board.index(piece_to_move)]['column'] = move_data['next_column']
+            game.board[game.board.index(piece_to_move)]['moved'] = True
             game.save()
             return True
         except:
@@ -101,3 +107,9 @@ class GameManager(models.DjongoManager):
             game.winner = winner_data['winner']
             game.save()
             return game
+        
+    def get_moved_piece_index(self, game):
+        piece = next((p for p in game.board if p['moved']), None)
+        print('last moved piece', piece)
+        if piece is not None:
+            return game.board.index(piece)
