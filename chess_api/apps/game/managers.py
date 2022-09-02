@@ -3,6 +3,9 @@ from .data_classes import Piece
 from bson import ObjectId
 
 class GameManager(models.DjongoManager):
+    def find_game(self, game_id):
+        return self.filter(_id=ObjectId(game_id)).first()
+    
     def new_game(self, player_w_code='', player_w_nick='',
                  player_b_nick='', player_b_code=''):
         game = self.create(
@@ -15,7 +18,7 @@ class GameManager(models.DjongoManager):
         return game
     
     def make_move(self, move_data):
-        game = self.filter(_id=ObjectId(move_data['game_id'])).first()
+        game = self.find_game(move_data['game_id'])
         if game is not None:
             if not self.move_piece(game, move_data):
                 return False, None
@@ -56,4 +59,8 @@ class GameManager(models.DjongoManager):
     def find_piece(self,game, column, row):
         return next((p for p in game.board if p['column'] == column
                       and p['row'] == row), None)
+        
+    def join_player(self, player_info):
+        game = self.find_game(player_info['game_id'])
+
         

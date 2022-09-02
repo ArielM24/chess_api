@@ -11,6 +11,25 @@ class HomeView(APIView):
     def get(self, request):
         return Response(data={"Welcome to chess"})
     
+    
+class GetGameView(APIView):
+    def get(self, request):
+        print(request.query_params)
+        data = GetGameSerializer(data=request.query_params)
+        if data.is_valid():
+            try:
+                game = Game.objects.find_game(data.validated_data['game_id'])
+                if game is not None:
+                    js = GameSerializer(game).data
+                    return Response(data={'game':js})
+                return Response(data={'error':'game not found'})
+            except Exception as e:
+                return Response(data={'error':str(e)})
+                
+        return Response(data={'error':data.errors})
+        
+            
+    
 class NewGameView(APIView):
     def post(self, request):
         data = NewGameSerializer(data=request.data)
@@ -38,7 +57,14 @@ class MakeMoveView(APIView):
             print(data.validated_data)
             success, game = Game.objects.make_move(move_data=data.validated_data)
             js = GameSerializer(game).data
-            js = json.loads(json.dumps(js))
             return Response(data={'success':success, 'game':js})
+        else:
+            return Response(data={'error':data.errors})
+        
+class JoinPlayerView(APIView):
+    def post(self, request):
+        data=JoinPlayerSerializer(data=request.data)
+        if data.is_valid():
+            pass
         else:
             return Response(data={'error':data.errors})
