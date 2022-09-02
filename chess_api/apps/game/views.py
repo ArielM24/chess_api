@@ -65,6 +65,13 @@ class JoinPlayerView(APIView):
     def post(self, request):
         data=JoinPlayerSerializer(data=request.data)
         if data.is_valid():
-            pass
+            #try:
+            game = Game.objects.join_player(data.validated_data)
+            if game is not None:
+                js = GameSerializer(game).data
+                return Response(data={'success': True, 'game':js})
+            return Response(data={'success': False, 'game':'error'})
+            #except Exception as e:
+            #    return Response(data={'error':str(e)})
         else:
             return Response(data={'error':data.errors})

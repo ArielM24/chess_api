@@ -62,5 +62,35 @@ class GameManager(models.DjongoManager):
         
     def join_player(self, player_info):
         game = self.find_game(player_info['game_id'])
-
+        joined = False
+        if player_info['player_type'] == 'player_b':
+            joined = self._join_player_b(game, player_info)
+        elif player_info['player_type'] == 'player_w':
+            joined = self._join_player_w(game, player_info)
+        elif player_info['player_type'] == 'spectator':
+            joined = True
+        if joined:
+            return self.find_game(player_info['game_id'])
+            
         
+    def _join_player_b(self, game, player_info):
+        if game.player_b_code != '':
+            if game.player_b_code == player_info['player_code']:
+                return True
+        else:
+            game.player_b_code = player_info['player_code']
+            game.player_b_nick = player_info['player_nick']
+            game.save()
+            return True
+        return False
+    
+    def _join_player_w(self, game, player_info):
+        if game.player_w_code != '':
+            if game.player_w_code == player_info['player_code']:
+                return True
+        else:
+            game.player_w_code = player_info['player_code']
+            game.player_w_nick = player_info['player_nick']
+            game.save()
+            return True
+        return False
