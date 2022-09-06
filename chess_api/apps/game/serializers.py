@@ -17,7 +17,7 @@ class GameSerializer(serializers.ModelSerializer):
     def get_moves(self, obj):
         return list(obj.moves)
     
-class GetGameSerializer(serializers.Serializer):
+class IdGameSerializer(serializers.Serializer):
     game_id = serializers.CharField(required=True)
     
  

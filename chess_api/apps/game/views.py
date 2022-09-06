@@ -15,7 +15,7 @@ class HomeView(APIView):
 class GetGameView(APIView):
     def get(self, request):
         print(request.query_params)
-        data = GetGameSerializer(data=request.query_params)
+        data = IdGameSerializer(data=request.query_params)
         if data.is_valid():
             try:
                 game = Game.objects.find_game(data.validated_data['game_id'])
@@ -87,3 +87,20 @@ class SetWinnerView(APIView):
             return Response(data={'success': False, 'error': 'error'})
         else:
             return Response(data={'error':data.errors})
+        
+class GetMovedPieceView(APIView):
+    def get(self, request):
+        data = IdGameSerializer(data=request.query_params)
+        if data.is_valid():
+            game = Game.objects.find_game(data.validated_data['game_id'])
+            if game is not None:
+                piece = Game.objects.get_moved_piece(game)
+                players = {
+                    'player_b': game.player_b_nick,
+                    'player_w': game.player_w_nick,
+                }
+                if piece is not None:
+                    return Response(data={'piece': dict(piece), 'players': players})
+            return Response(data={'success': False,'error':'no piece found'})
+        else:
+            return Response(data={'success': False,'error':data.errors})

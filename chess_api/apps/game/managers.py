@@ -109,7 +109,11 @@ class GameManager(models.DjongoManager):
             return game
         
     def get_moved_piece_index(self, game):
-        piece = next((p for p in game.board if p['moved']), None)
-        print('last moved piece', piece)
+        piece = self.get_moved_piece(game)
         if piece is not None:
             return game.board.index(piece)
+        
+    def get_moved_piece(self, game):
+        piece = next((p for p in game.board if p['moved']), None)
+        print('last moved piece', piece)
+        return piece
